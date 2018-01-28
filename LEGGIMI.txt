@@ -1,0 +1,61 @@
+INTRODUZIONE
+L'obiettivo di questi script è quello di automatizzare le impostazioni
+del PROXY delle macchine Ubuntu/Debian.
+Molto stranamente Linux non dispone di strumenti in grado di implementare
+lo standard WPAD/PAC (Web Proxy Auto Detect / Proxy Auto Config ) a livello
+di sessione utente e di APT.
+Per capire come funziona lo standard, si può iniziare da questi link
+https://en.wikipedia.org/wiki/Web_Proxy_Auto-Discovery_Protocol
+https://findproxyforurl.com/wpad-introduction/
+
+In Linux i browsers implementano correttamente lo standard WPAD/PAC, quasi 
+tutti i tools prevedono la possibilità di utilizzare un proxy (ma non di
+riconoscere automaticamente la sua presenza), quello che manca è qualcosa che
+metta il tutto insieme.
+
+Da qui nasce l'idea di creare questi script. Attraverso questi script il
+riconsocimento del proxy diventa automatico (nei limiti indicati dopo) e
+quindi non è richiesto alcun intervento manuale nel passaggio da una rete LAN
+dotata di Proxy ad una rete LAN priva.
+
+
+LIMITI
+L'implementazione dello standard WPAD/PAC è parziale e limitata alle esigenze
+ed al contesto delle infrastrutture di rete progettate da me.
+
+N.B. I browser hanno alcune paturnie con l'implementazione di WPAD/PAC
+- Firefox. Non è grado di acquisire le impostazioni (automatiche o manuali che
+siano) partendo dalle impostazioni di sistema; pertanto occorre impostargli 
+esplicitamente l'individuazione automatica delle impostazioni proxy.
+Il problema è comune anche sotto Windows.
+- Chromium. Sotto Linux prende le impostazioni dall'ambiente utente, se non ci
+sono, non è in grado di usare il proxy.  
+
+====
+Sarebbe interessante sviluppare una versione che super i limiti sopra indicati 
+====
+
+PREREQUISITI
+Non sono richiesti particolari prerequisti, al 90% dovrebbe esserci già
+tutto l'occorrente in qualunque installazione Ubuntu/Debian.
+In ogni caso assicurarsi che siano installati WGET (sudo apt install wget) e
+GAWK (sudo apt install gawk).
+
+INSTALLAZIONE
+I file devono essere installati con i privilegi di amministratore, se
+necessario usare sudo.
+E' consigliabile disabilitare l'autologin in quanto l'apertura della sessione
+potrebbe avvenire prima dell'attivazione dei servizi di rete, rendendo
+inefficace lo script.
+I file da installare sono 3:
+- 00ProxyDetect. E' il file che serve ad impostare il rilevamento automatico
+del proxy per APT (e APT-GET).
+Deve essere posto nella directory /etc/apt/apt.conf.d/
+- wpadpac2.sh. E' il file che fa il lavoro di ricerca delle impostazioni
+del proxy e di preparazione delle variabili di ambiente per l'utente.
+Deve essere posto nella directory /etc/profile.d/
+- aptproxydetect.sh. E' il file che fa da interfaccia per APT; deve essere
+posto nella directory /usr/local/bin/ e devono essergli dati i diritti di
+esecuzione (sudo chmod +x aptproxydetect.sh)
+
+ 

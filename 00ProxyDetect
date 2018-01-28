@@ -1,0 +1,6 @@
+# serve per il settaggio automatico del proxy
+# deve essere messo in /etc/apt/apt.conf.d
+#
+# utilizza lo script indicato
+#
+Acquire::http::Proxy-Auto-Detect "/usr/local/bin/aptproxydetect.sh";
